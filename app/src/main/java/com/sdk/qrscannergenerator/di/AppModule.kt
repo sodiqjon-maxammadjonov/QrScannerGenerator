@@ -2,6 +2,7 @@ package com.sdk.qrscannergenerator.di
 
 import android.app.Application
 import androidx.room.Room
+import com.sdk.qrscannergenerator.data.local.db.QRDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -3,7 +3,7 @@ package com.sdk.qrscannergenerator.data.local.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "history")
+@Entity(tableName = "qr_history")
 data class QREntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
