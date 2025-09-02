@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
-import com.sdk.qrscannergenerator.presentation.scanner.ScannerScreen
+import com.sdk.qrscannergenerator.ui.screen.main.MainScreen
 import com.sdk.qrscannergenerator.ui.theme.QrScannerGeneratorTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             QrScannerGeneratorTheme {
                 Surface() {
-                    ScannerScreen()
+                    MainScreen()
                 }
             }
         }
