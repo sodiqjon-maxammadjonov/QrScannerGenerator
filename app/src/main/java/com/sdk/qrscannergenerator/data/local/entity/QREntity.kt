@@ -9,6 +9,8 @@ data class QREntity(
     val id: Int = 0,
     val content: String,
     val type: String,
+    val qrType: String,
     val createdAt: Long,
-    val isGenerated: Boolean
+    val isGenerated: Boolean,
+    val imagePath: String? = null
 )

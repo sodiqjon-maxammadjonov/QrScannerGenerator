@@ -33,6 +33,8 @@ class QrViewModel(
 
     private val _state = MutableStateFlow(QrUiState())
     val state: StateFlow<QrUiState> = _state.asStateFlow()
+    private val _scannedResults = MutableStateFlow<List<String>>(emptyList())
+    val scannedResults: StateFlow<List<String>> = _scannedResults
 
     init {
         onEvent(QrEvent.LoadHistory)
@@ -45,16 +47,19 @@ class QrViewModel(
                     insertQr(event.content, event.type, event.isGenerated)
                 }
             }
+
             is QrEvent.Delete -> {
                 viewModelScope.launch {
                     deleteQr(event.id)
                 }
             }
+
             is QrEvent.ClearAll -> {
                 viewModelScope.launch {
                     clearHistory()
                 }
             }
+
             is QrEvent.LoadHistory -> {
                 getHistory()
                     .onEach { list ->
@@ -62,6 +67,16 @@ class QrViewModel(
                     }
                     .launchIn(viewModelScope)
             }
+        }
+
+    }
+    fun saveScannedResult(result: String) {
+        viewModelScope.launch {
+            val updated = _scannedResults.value.toMutableList()
+            if (!updated.contains(result)) {
+                updated.add(0, result)
+            }
+            _scannedResults.value = updated
         }
     }
 }

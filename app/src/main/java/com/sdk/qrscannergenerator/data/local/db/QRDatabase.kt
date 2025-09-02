@@ -12,4 +12,8 @@ import com.sdk.qrscannergenerator.data.local.entity.QREntity
 )
 abstract class QRDatabase : RoomDatabase() {
     abstract fun qrDao(): QRDao
+
+    companion object {
+        const val DATABASE_NAME = "qr_scanner_generator_db"
+    }
 }
