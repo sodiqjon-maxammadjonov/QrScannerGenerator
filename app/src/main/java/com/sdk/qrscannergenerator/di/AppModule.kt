@@ -22,7 +22,7 @@ object AppModule {
         return Room.databaseBuilder(
             app,
             QRDatabase::class.java,
-            "qr_db"
+            QRDatabase.DATABASE_NAME
         ).build()
     }
 
@@ -32,9 +32,10 @@ object AppModule {
         return QrRepositoryImpl(db.qrDao())
     }
 
+    // Use Cases
     @Provides
     @Singleton
-    fun provideInsertQr(repository: QRRepository): InsertQR {
+    fun provideInsertQR(repository: QRRepository): InsertQR {
         return InsertQR(repository)
     }
 
@@ -42,6 +43,30 @@ object AppModule {
     @Singleton
     fun provideGetHistory(repository: QRRepository): GetHistory {
         return GetHistory(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetGeneratedHistory(repository: QRRepository): GetGeneratedHistory {
+        return GetGeneratedHistory(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetScannedHistory(repository: QRRepository): GetScannedHistory {
+        return GetScannedHistory(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchHistory(repository: QRRepository): SearchHistory {
+        return SearchHistory(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetQRById(repository: QRRepository): GetQRById {
+        return GetQRById(repository)
     }
 
     @Provides
@@ -54,5 +79,23 @@ object AppModule {
     @Singleton
     fun provideClearHistory(repository: QRRepository): ClearHistory {
         return ClearHistory(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideClearGeneratedHistory(repository: QRRepository): ClearGeneratedHistory {
+        return ClearGeneratedHistory(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideClearScannedHistory(repository: QRRepository): ClearScannedHistory {
+        return ClearScannedHistory(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetHistoryCount(repository: QRRepository): GetHistoryCount {
+        return GetHistoryCount(repository)
     }
 }
