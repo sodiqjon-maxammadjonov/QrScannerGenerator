@@ -1,17 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android") version libs.versions.hilt apply false
+    kotlin("kapt")
+}
+hilt {
+    enableAggregatingTask = false
 }
 
 android {
     namespace = "com.sdk.qrscannergenerator"
     compileSdk = 36
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
     defaultConfig {
         applicationId = "com.sdk.qrscannergenerator"
         minSdk = 26
@@ -31,6 +31,7 @@ android {
             )
         }
     }
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
