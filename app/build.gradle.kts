@@ -9,7 +9,9 @@ plugins {
 android {
     namespace = "com.sdk.qrscannergenerator"
     compileSdk = 36
-
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
     defaultConfig {
         applicationId = "com.sdk.qrscannergenerator"
         minSdk = 26
@@ -29,9 +31,11 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
     }
     kotlinOptions {
         jvmTarget = "11"
