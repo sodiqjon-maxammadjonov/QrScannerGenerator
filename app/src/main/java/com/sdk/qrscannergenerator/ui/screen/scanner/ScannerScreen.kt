@@ -65,7 +65,6 @@ fun ScannerScreen(viewModel: QRViewModel) {
                     contentAlignment = Alignment.Center
                 ) {
                     if (uiState.isCameraOpen) {
-                        // TODO: Camera preview composable
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
