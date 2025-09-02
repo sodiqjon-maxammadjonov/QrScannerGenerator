@@ -7,9 +7,8 @@ import androidx.room.PrimaryKey
 data class QREntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val text: String,
-    val createdAt: Long = System.currentTimeMillis(),
     val content: String,
     val type: String,
+    val createdAt: Long,
     val isGenerated: Boolean
 )
