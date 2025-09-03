@@ -1,10 +1,14 @@
 package com.sdk.qrscannergenerator.presentation.viewmodel
 
+import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.zxing.qrcode.QRCodeWriter
 import com.sdk.qrscannergenerator.data.local.entity.QREntity
 import com.sdk.qrscannergenerator.domain.usecase.*
 import com.sdk.qrscannergenerator.presentation.event.QREvent
@@ -18,9 +22,13 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
+import com.google.zxing.BarcodeFormat
 
 @HiltViewModel
 class QRViewModel @Inject constructor(
+    private val app: Application,
     private val insertQR: InsertQR,
     private val getHistory: GetHistory,
     private val getGeneratedHistory: GetGeneratedHistory,
@@ -115,35 +123,62 @@ class QRViewModel @Inject constructor(
     }
 
     // ==================== GENERATION METHODS ====================
+    fun generateQRBitmap(content: String, size: Int = 512): Bitmap {
+        val writer = QRCodeWriter()
+        val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, size, size)
+        val bitmap = createBitmap(size, size, Bitmap.Config.RGB_565)
+
+        for (x in 0 until size) {
+            for (y in 0 until size) {
+                bitmap[x, y] =
+                    if (bitMatrix[x, y]) android.graphics.Color.BLACK else android.graphics.Color.WHITE
+            }
+        }
+        return bitmap
+    }
     private fun generateQR(content: String, type: String) {
+        val context = app.applicationContext
         viewModelScope.launch {
             _uiState.update { it.copy(isGenerating = true) }
             try {
-                // TODO: QR generation logic here (using ZXing library)
-                // val bitmap = generateQRBitmap(content)
+                println("👉 QR kod yaratish boshlandi: content = $content, type = $type")
 
-                // Save to database
+                // 1. Bitmap yaratish
+                val bitmap = generateQRBitmap(content)
+                println("✅ Bitmap yaratildi: ${bitmap.width}x${bitmap.height}")
+
+                // 2. Faylga saqlash
+                val fileName = "qr_${System.currentTimeMillis()}"
+                val imagePath = saveBitmapToInternalStorage(context, bitmap, fileName)
+                println("💾 Bitmap saqlandi: $imagePath")
+
+                // 3. DB ga yozish
                 insertQR(
                     content = content,
                     type = type,
                     qrType = "QR_CODE",
-                    isGenerated = true
+                    isGenerated = true,
+                    imagePath = imagePath
                 )
+                println("📂 DB ga yozildi: content=$content, type=$type, path=$imagePath")
 
+                // 4. UI state yangilash
                 _uiState.update {
                     it.copy(
                         isGenerating = false,
                         lastGeneratedContent = content,
-                        // generatedBitmap = bitmap,
+                        generatedBitmap = bitmap,
                         successMessage = "QR kod muvaffaqiyatli yaratildi!",
                         showSuccess = true
                     )
                 }
+                println("🎉 UI state yangilandi va QR kod tayyor")
 
-                // Refresh history
+                // 5. History yangilash
                 loadAllHistory()
 
             } catch (e: Exception) {
+                println("❌ Xatolik: ${e.message}")
                 _uiState.update {
                     it.copy(
                         isGenerating = false,
@@ -154,6 +189,9 @@ class QRViewModel @Inject constructor(
             }
         }
     }
+
+
+
 
     private fun generateBarcode(content: String, type: String) {
         viewModelScope.launch {

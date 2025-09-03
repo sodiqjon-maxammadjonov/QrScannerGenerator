@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -79,6 +80,16 @@ fun HistoryItemCard(
                 maxLines = if (showActions) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis
             )
+
+            // Agar showActions true bo'lsa QR bitmapni chiqaramiz
+            if (showActions) {
+                Spacer(modifier = Modifier.height(12.dp))
+
+                qr.imagePath?.let { path ->
+                    QRImageFromPath(path)
+                }
+            }
+
 
             // Action buttons (when expanded)
             if (showActions) {

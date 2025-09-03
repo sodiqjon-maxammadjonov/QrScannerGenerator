@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+
+    implementation("com.google.zxing:core:3.5.3")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,6 +64,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.play.services.mlkit.barcode.scanning)
     implementation(libs.ui)
+    implementation(libs.androidx.bluetooth)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)

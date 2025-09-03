@@ -1,5 +1,6 @@
 package com.sdk.qrscannergenerator.domain.usecase
 
+import com.google.zxing.BarcodeFormat
 import com.sdk.qrscannergenerator.domain.repository.QRRepository
 import jakarta.inject.Inject
 
@@ -11,7 +12,7 @@ class InsertQR @Inject constructor(
         type: String,
         qrType: String,
         isGenerated: Boolean,
-        imagePath: String? = null
+        imagePath: String?  = null
     ) {
         repository.insertQr(content, type, qrType, isGenerated, imagePath)
     }

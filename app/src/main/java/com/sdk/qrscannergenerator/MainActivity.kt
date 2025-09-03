@@ -16,7 +16,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QrScannerGeneratorTheme {
-                Surface() {
+                Surface(
+
+                ) {
                     MainScreen()
                 }
             }
